@@ -73,19 +73,30 @@ function exportToExcel() {
         return;
     }
 
+    // Récupération de la date actuelle (jour-mois-année)
+    const currentDate = new Date();
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = currentDate.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
     // Crée une feuille Excel avec les données
     const worksheetData = [
-        ["Nom", "Prénom", "Bilan Carbone Total (kg CO₂e)", "Bilan Carbone Lieu de Stage (kg CO₂e)", "Bilan Carbone Domicile-Lieu (kg CO₂e)"], // En-têtes
-        [userName, userSurname, finalCarbonResult, stageCarbonEmission, homeToWorkCarbonEmission] // Contenu
+        ["Nom", "Prénom", "Bilan Carbone Total (kg CO₂e)", "Bilan Carbone Lieu de Stage (kg CO₂e)", "Bilan Carbone Domicile-Lieu (kg CO₂e)", "Date"], // En-têtes
+        [userName, userSurname, finalCarbonResult, stageCarbonEmission, homeToWorkCarbonEmission, formattedDate] // Contenu avec la date
     ];
+    
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
     // Crée un classeur Excel
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Résultats Bilan Carbone");
 
-    // Télécharge le fichier Excel
-    XLSX.writeFile(workbook, "bilan_carbone.xlsx");
+    // Utilisation du nom de l'utilisateur pour nommer le fichier Excel
+    const fileName = `${userName}_${userSurname}_Bilan_Carbone_${formattedDate}.xlsx`;
+
+    // Télécharge le fichier Excel avec le nom personnalisé
+    XLSX.writeFile(workbook, fileName);
 }
 
 // Fonction de calcul du bilan carbone
