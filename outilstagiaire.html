@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Bilan Carbone</title>
+    <link rel="stylesheet" href="outilstage.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Titre principal -->
+        <h1>Simulateur de Bilan Carbone</h1>
+        <p>
+            Ce simulateur évalue l'empreinte carbone de votre stage, c'est-à-dire les émissions liées 
+            au transport vers le lieu de stage ainsi que la distance domicile-lieu de stage.
+        </p>
+        <p>Les autres émissions liées à l'alimentation ou encore à l'électricité sont hors périmètre.</p>
+        
+        <!-- Section formulaire -->
+        <div id="form-section">
+            <form id="carbonForm">
+                <!-- Identité -->
+                <input type="text" id="Nom" name="Nom" required placeholder="Entrez votre nom">
+                <input type="text" id="Prénom" name="Prénom" required placeholder="Entrez votre prénom">
+                
+                <!-- Choix du site -->
+                <label for="site">Choix du site :</label>
+                <select id="site" name="site">
+                    <option value="Angers">Angers</option>
+                    <option value="Paris-Vélizy">Paris-Vélizy</option>
+                    <option value="Dijon">Dijon</option>
+                </select>
+                
+                <!-- Classe -->
+                <label for="classe">Choisissez votre classe :</label>
+                <select id="classe" name="classe">
+                    <option value="E1">E1</option>
+                    <option value="E2">E2</option>
+                    <option value="E3e">E3e</option>
+                    <option value="E4e">E4e</option>
+                    <option value="E5e">E5e</option>
+                    <option value="E3a">E3a</option>
+                    <option value="E4a">E4a</option>
+                    <option value="E5a">E5a</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="B3">B3</option>
+                </select>
+
+                <!-- Mode de transport principal -->
+                <label for="Mode1">Mode de transport principal utilisé pour vous rendre au lieu du stage:</label>
+                <select id="Mode1" name="Mode1">
+                    <option value="train">Train</option>
+                    <option value="bus">Bus</option>
+                    <option value="VoitureElectrique">Voiture Électrique</option>
+                    <option value="AvionCourt">Avion court-courrier (Europe)</option>
+                    <option value="AvionLong">Avion long-courrier (hors Europe)</option>
+                    <option value="VoitureDiesel">Voiture Diesel</option>
+                    <option value="VoitureEssence">Voiture Essence</option>
+                </select>
+
+                <!-- Distance aller -->
+                <label for="distance1">Distance aller pour vous rendre sur le lieu  du stage (km) :</label>
+                <input type="number" id="distance1" name="distance1" required min="0" placeholder="Entrez la distance en km">
+
+               
+               
+               
+
+                <!-- Transport principal -->
+                <label for="transport">Quel est le mode de transport principal ?</label>
+                <select id="transport" name="transport" required>
+                    <option value="VoitureDiesel">Voiture Diesel</option>
+                    <option value="VoitureEssence">Voiture Essence</option>
+                    <option value="VoitureElectrique">Voiture Électrique</option>
+                    <option value="tram">Tramway</option>
+                    <option value="bus">Bus</option>
+                    <option value="trotinetteElec">Trottinette Électrique</option>
+                    <option value="marche">Marche à pied</option>
+                </select>
+
+                 <!-- Distance domicile-lieu -->
+                 <label for="distance">Distance domicile-lieu de stage (km) :</label>
+                 <input type="number" id="distance" name="distance" required min="0" placeholder="Entrez la distance en km">
+
+                <!-- Jours et durée -->
+                <label for="Jours">Nombre moyen de jours de travail par semaine :</label>
+                <input type="number" id="Jours" name="Jours" required min="0" placeholder="Entrez le nombre de jours">
+                
+                <label for="Duree">Durée totale du stage (semaines) :</label>
+                <input type="number" id="Duree" name="Duree" required min="0" placeholder="Entrez le nombre de semaines">
+
+                <!-- Bouton calculer -->
+                <button type="button" class="btn" onclick="calculateCarbon()">Calculer</button>
+            </form>
+        </div>
+
+        <!-- Section résultat -->
+        <div id="result-section">
+            <h2>Résultat</h2>
+            <div id="result"></div>
+            <canvas id="carbonChart" width="400" height="200"></canvas>
+            <button id="back-button" class="btn" type="button" onclick="goBack()">Revenir au formulaire</button>
+           
+                <button class="btn" type="button" onclick="exportToExcel()">Télécharger le fichier Excel</button>
+            
+            
+        </div>
+        <div>
+            <canvas id="carbonChart"></canvas>
+            
+        </div>
+        
+
+    <script src="outilstagiaire.js"></script>
+</body>
+</html>
