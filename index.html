@@ -49,6 +49,8 @@
                     <option value="B3">B3</option>
                 </select>
 
+
+
                 <!-- Mode de transport principal -->
                 <label for="Mode1">Mode de transport principal utilisé pour vous rendre au lieu du stage:</label>
                 <select id="Mode1" name="Mode1">
@@ -60,6 +62,8 @@
                     <option value="VoitureDiesel">Voiture Diesel</option>
                     <option value="VoitureEssence">Voiture Essence</option>
                 </select>
+
+                <h3>Dans un premier temps, intéressons-nous à comment vous vous êtes rendus sur le lieu du stage</h3>
 
                 <!-- Distance aller -->
                 <label for="distance1">Distance aller pour vous rendre sur le lieu  du stage (km) :</label>
@@ -80,6 +84,9 @@
                     <option value="trotinetteElec">Trottinette Électrique</option>
                     <option value="marche">Marche à pied</option>
                 </select>
+
+
+                <h3>Ensuite, voyons comment vous vous déplaciez de votre domicile à votre lieu de travail</h3>
 
                  <!-- Distance domicile-lieu -->
                  <label for="distance">Distance domicile-lieu de stage (km) :</label>
@@ -104,7 +111,7 @@
             <canvas id="carbonChart" width="400" height="200"></canvas>
             <button id="back-button" class="btn" type="button" onclick="goBack()">Revenir au formulaire</button>
            
-                <button class="btn" type="button" onclick="exportToExcel()">Télécharger le fichier Excel</button>
+            <button class="btn" type="button" onclick="exportToExcel()">Télécharger le fichier Excel</button>
             
             
         </div>
