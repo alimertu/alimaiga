@@ -5,10 +5,10 @@ const emissionFactors = {
     tram: 0.06,
     bus: 0.12,
     trotinetteElec: 0.027,
-    Voiture_Electrique: 0.0367,
     AvionCourt: 0.50,
     AvionLong: 0.130,
-    train: 0.014
+    train: 0.014,
+    metro:0.0026
 };
 
 const transportNames = {
@@ -17,10 +17,11 @@ const transportNames = {
     tram: "Tram",
     bus: "Bus",
     trotinetteElec: "Trottinette Électrique",
-    Voiture_Electrique: "Voiture Électrique",
+    
     AvionCourt: "Avion Court-Courrier",
     AvionLong: "Avion Long-Courrier",
-    train: "Train"
+    train: "Train",
+    metro:"Métro"
 };
 
 // Variables pour stocker les données du calcul
@@ -29,6 +30,7 @@ let stageCarbonEmission = null;
 let homeToWorkCarbonEmission = null;
 let userName = "";
 let userSurname = "";
+let covoit = null;
 
 // Fonction pour afficher le graphique
 function displayCarbonChart(carbonEmission1, carbonJours) {
@@ -73,31 +75,43 @@ function exportToExcel() {
         return;
     }
 
+    // Récupération de la date actuelle (jour-mois-année)
+    const currentDate = new Date();
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = currentDate.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
     // Crée une feuille Excel avec les données
     const worksheetData = [
-        ["Nom", "Prénom", "Bilan Carbone Total (kg CO₂e)", "Bilan Carbone Lieu de Stage (kg CO₂e)", "Bilan Carbone Domicile-Lieu (kg CO₂e)"], // En-têtes
-        [userName, userSurname, finalCarbonResult, stageCarbonEmission, homeToWorkCarbonEmission] // Contenu
+        ["Nom", "Prénom", "Bilan Carbone Total (kg CO₂e)", "Bilan Carbone Lieu de Stage (kg CO₂e)", "Bilan Carbone Domicile-Lieu (kg CO₂e)", "Date"], // En-têtes
+        [userName, userSurname, finalCarbonResult, stageCarbonEmission, homeToWorkCarbonEmission, formattedDate] // Contenu avec la date
     ];
+    
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
     // Crée un classeur Excel
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Résultats Bilan Carbone");
 
-    // Télécharge le fichier Excel
-    XLSX.writeFile(workbook, "bilan_carbone.xlsx");
+    // Utilisation du nom de l'utilisateur pour nommer le fichier Excel
+    const fileName = `${userName}_${userSurname}_Bilan_Carbone_${formattedDate}.xlsx`;
+
+    // Télécharge le fichier Excel avec le nom personnalisé
+    XLSX.writeFile(workbook, fileName);
 }
 
 // Fonction de calcul du bilan carbone
 function calculateCarbon() {
     userName = document.getElementById('Nom').value.trim();
     userSurname = document.getElementById('Prénom').value.trim();
-    const distance = parseFloat(document.getElementById('distance').value);
+    const distance = parseFloat(document.getElementById('distance').value) *2;
     const distance1 = parseFloat(document.getElementById('distance1').value) * 2;
     const transport = document.getElementById('transport').value;
     const mode1 = document.getElementById('Mode1').value;
     const jours = parseFloat(document.getElementById('Jours').value);
     const duree = parseFloat(document.getElementById('Duree').value);
+    const distance3 = parseFloat(document.getElementById('distance3').value);
 
     // Validation des entrées
     if (!userName || !userSurname) {
@@ -109,12 +123,20 @@ function calculateCarbon() {
         return;
     }
 
+    
     // Calcul des émissions
     const carbonEmissionDeplacement = distance * emissionFactors[transport];
     const carbonJours = carbonEmissionDeplacement * jours;
+    const covoitemission = distance3 * emissionFactors.VoitureEssence;
     stageCarbonEmission = distance1 * emissionFactors[mode1];
     finalCarbonResult = carbonJours * duree + stageCarbonEmission;
     homeToWorkCarbonEmission = carbonJours * duree;
+
+    if (distance3 > 0){
+        finalCarbonResult = carbonJours * duree + stageCarbonEmission + covoitemission;
+        stageCarbonEmission= distance1 * emissionFactors[mode1] + covoitemission
+
+    } 
 
     // Affichage du résultat
     document.getElementById('result').innerHTML = `
