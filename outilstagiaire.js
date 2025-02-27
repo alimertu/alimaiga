@@ -1,14 +1,20 @@
 // Facteurs d'émission pour les modes de transport (kg CO₂ par km)
 const emissionFactors = {
-    VoitureEssence: 0.107,
-    VoitureDiesel: 0.186,
-    tram: 0.06,
-    bus: 0.12,
-    trotinetteElec: 0.027,
-    AvionCourt: 0.50,
-    AvionLong: 0.130,
-    train: 0.014,
-    metro:0.0026
+    VoitureEssence: 0.239,
+    VoitureDiesel: 0.227,
+    tram: 0.00329,
+    autobus: 0.113, //autobus gazole
+    trotinetteElec: 0.025,
+    AvionCourt: 0.258,
+    AvionLong: 0.152,
+    train: 0.05,
+    metro:0.0026,
+    AvionMoyen:0.187,
+    autocar:0.0295,
+    voitureElec:0.103,
+    voilier:0,
+    marche:0,
+    velo:0
 };
 
 const transportNames = {
@@ -17,11 +23,12 @@ const transportNames = {
     tram: "Tram",
     bus: "Bus",
     trotinetteElec: "Trottinette Électrique",
-    
+    AvionMoyen : "Avion Moyen-Courrier",
     AvionCourt: "Avion Court-Courrier",
     AvionLong: "Avion Long-Courrier",
     train: "Train",
-    metro:"Métro"
+    metro:"Métro",
+    
 };
 
 // Variables pour stocker les données du calcul
@@ -30,7 +37,7 @@ let stageCarbonEmission = null;
 let homeToWorkCarbonEmission = null;
 let userName = "";
 let userSurname = "";
-let covoit = null;
+
 
 // Fonction pour afficher le graphique
 function displayCarbonChart(carbonEmission1, carbonJours) {
@@ -101,6 +108,19 @@ function exportToExcel() {
     XLSX.writeFile(workbook, fileName);
 }
 
+function toggleCovoituragePassengers(mode) {
+    const covoiturage = document.getElementById("covoiturage" + mode).value;
+    const passagersContainer = document.getElementById("passagersContainer" + mode);
+
+    if (covoiturage === "oui") {
+        passagersContainer.style.display = "block";
+    } else {
+        passagersContainer.style.display = "none";
+        document.getElementById("passagers" + mode).value = ""; // Réinitialiser le champ
+    }
+}
+
+
 // Fonction de calcul du bilan carbone
 function calculateCarbon() {
     userName = document.getElementById('Nom').value.trim();
@@ -111,7 +131,9 @@ function calculateCarbon() {
     const mode1 = document.getElementById('Mode1').value;
     const jours = parseFloat(document.getElementById('Jours').value);
     const duree = parseFloat(document.getElementById('Duree').value);
-    const distance3 = parseFloat(document.getElementById('distance3').value);
+    const distance2 = parseFloat(document.getElementById('distance2').value) * 2;
+    const mode2 =  document.getElementById('mode2').value;
+    
 
     // Validation des entrées
     if (!userName || !userSurname) {
@@ -124,19 +146,44 @@ function calculateCarbon() {
     }
 
     
-    // Calcul des émissions
+
+    
+    // Vérification du covoiturage et récupération du nombre de passagers
+const covoiturage1 = document.getElementById("covoiturage1").value;
+const passagers1 = parseInt(document.getElementById("passagers1").value) || 1;
+
+const covoiturage2 = document.getElementById("covoiturage2").value;
+const passagers2 = parseInt(document.getElementById("passagers2").value) || 1;
+
+stageCarbonEmission = 0;
+
+// Calcul pour le premier mode de transport
+if (distance1 > 0 && emissionFactors[mode1] !== undefined) {
+    let emission = distance1 * emissionFactors[mode1];
+    if (covoiturage1 === "oui" && (mode1 === "VoitureDiesel" || mode1 === "VoitureEssence")) {
+        emission /= passagers1;
+    }
+    stageCarbonEmission += emission;
+}
+
+// Calcul pour le deuxième mode de transport
+if (distance2 > 0 && emissionFactors[mode2] !== undefined) {
+    let emission = distance2 * emissionFactors[mode2];
+    if (covoiturage2 === "oui" && (mode2 === "VoitureDiesel" || mode2 === "VoitureEssence")) {
+        emission /= passagers2;
+    }
+    stageCarbonEmission += emission;
+}
+
+
     const carbonEmissionDeplacement = distance * emissionFactors[transport];
     const carbonJours = carbonEmissionDeplacement * jours;
-    const covoitemission = distance3 * emissionFactors.VoitureEssence;
-    stageCarbonEmission = distance1 * emissionFactors[mode1];
+    
+    //stageCarbonEmission = distance1 * emissionFactors[mode1];
     finalCarbonResult = carbonJours * duree + stageCarbonEmission;
     homeToWorkCarbonEmission = carbonJours * duree;
 
-    if (distance3 > 0){
-        finalCarbonResult = carbonJours * duree + stageCarbonEmission + covoitemission;
-        stageCarbonEmission= distance1 * emissionFactors[mode1] + covoitemission
-
-    } 
+  
 
     // Affichage du résultat
     document.getElementById('result').innerHTML = `
