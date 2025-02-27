@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulateur de Bilan Carbone</title>
+    <title>Bilan Carbone Stage</title>
     <link rel="stylesheet" href="outilstage.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -18,10 +18,10 @@
         
         
         <!-- Titre principal -->
-        <h1>Simulateur de Bilan Carbone</h1>
+        <h1>Bilan Carbone Stage</h1>
         <p>
             Ce simulateur évalue l'empreinte carbone de votre stage, c'est-à-dire les émissions liées 
-            au transport vers le lieu de stage ainsi que la distance domicile-lieu de stage.
+            au transport vers le lieu de stage ainsi que celles liées à vos déplacements domicile lieu de stage.
         </p>
         <p>Les autres émissions liées à l'alimentation ou encore à l'électricité sont hors périmètre.</p>
         
@@ -65,39 +65,92 @@
                     <option value="B3">B3</option>
                 </select>
 
-                <h3>Dans un premier temps, intéressons-nous à comment vous vous êtes rendus sur le lieu du stage</h3>
+                <h3>Dans un premier temps, intéressons-nous à la façon dont vous vous êtes rendus sur le lieu du stage</h3>
+
+                <p> Si vous avez effectué un covoiturage , veuillez sélectionner dans "mode de transport" le véhicule considéré avant de sélectionner "oui" dans la rubrique covoiturage</p>
 
 
                 <!-- Mode de transport principal -->
-                <label for="Mode1">Mode de transport principal utilisé pour vous rendre au lieu du stage:</label>
+                <label for="Mode1">Quel est le mode de transport principal utilisé pour vous rendre sur le lieu du stage:</label>
                 <select id="Mode1" name="Mode1">
                     <option value="train">Train</option>
-                    <option value="bus">Bus</option>
-                    <option value="AvionCourt">Avion court-courrier (Europe)</option>
+                    <option value="autocar">Autocar</option>
+                    <option value="AvionCourt">Avion court-courrier (France)</option>
+                    <option value="AvionMoyen">Avion moyen-courrier (Europe)</option>
                     <option value="AvionLong">Avion long-courrier (hors Europe)</option>
                     <option value="VoitureDiesel">Voiture Diesel</option>
                     <option value="VoitureEssence">Voiture Essence</option>
+                    <option value="voitureElec">Voiture électrique</option>
+                    <option value="voilier">Voilier</option>
+                    <option value="marche">Marche</option>
+                    <option value="velo">Vélo</option>
+                    
+
                 </select>
 
                 
                 <!-- Distance aller -->
-                <label for="distance1">Distance aller pour vous rendre sur le lieu  du stage (km) :</label>
+                <label for="distance1">Distance aller pour vous rendre sur le lieu  du stage  :</label>
                 <input type="number" id="distance1" name="distance1" required min="0" placeholder="Entrez la distance en km">
 
-                <label for="covoit">Avez-vous effectué du covoiturage/Si non mettre 0</label>
-                <input type="number" id="distance3" name="distance3" required min="0" placeholder="Si oui sur quelle distance en km ">
-               
+                <!-- Covoiturage pour le premier mode de transport -->
+<label for="covoiturage1">Avez-vous fait du covoiturage pour le mode de transport principal ?</label>
+<select id="covoiturage1" name="covoiturage1" onchange="toggleCovoituragePassengers(1)">
+    <option value="non">Non</option>
+    <option value="oui">Oui</option>
+</select>
+
+<div id="passagersContainer1" style="display: none;">
+    <label for="passagers1">Nombre total de passagers (y compris vous) :</label>
+    <input type="number" id="passagers1" name="passagers1" min="1" placeholder="Entrez le nombre de passagers">
+</div>
+
+                <label for="mode2">Mode de transport secondaire si existant :</label>
+                <select id="mode2" name="mode2">
+                    <option value=" "></option>
+                    <option value="train">Train</option>
+                    <option value="autocar">Autocar</option>
+                    <option value="AvionCourt">Avion court-courrier (France)</option>
+                    <option value="AvionMoyen">Avion moyen-courrier (Europe)</option>
+                    <option value="AvionLong">Avion long-courrier (hors Europe)</option>
+                    <option value="VoitureDiesel">Voiture Diesel</option>
+                    <option value="VoitureEssence">Voiture Essence</option>
+                    <option value="voitureElec">Voiture électrique</option>
+                    <option value="voilier">Voilier</option>
+                    <option value="marche">Marche</option>
+                    <option value="velo">Vélo</option>
+                    
+
+                </select>
+
+                <label for="distance2">Distance parcourue :</label>
+                <input type="number" id="distance2" name="distance2" required min="0" placeholder="Entrez la distance en km">
+
+                <!-- Covoiturage pour le deuxième mode de transport -->
+<label for="covoiturage2">Avez-vous fait du covoiturage pour ce 2e mode de transport secondaire ?</label>
+<select id="covoiturage2" name="covoiturage2" onchange="toggleCovoituragePassengers(2)">
+    <option value="non">Non</option>
+    <option value="oui">Oui</option>
+</select>
+
+<div id="passagersContainer2" style="display: none;">
+    <label for="passagers2">Nombre total de passagers (y compris vous) :</label>
+    <input type="number" id="passagers2" name="passagers2" min="1" placeholder="Entrez le nombre de passagers">
+</div>
+
                 <h3>Ensuite, voyons comment vous vous déplaciez de votre domicile à votre lieu de travail</h3>
 
                 <!-- Transport principal -->
                 <label for="transport">Quel est le mode de transport principal ?</label>
                 <select id="transport" name="transport" required>
+                    
                     <option value="VoitureDiesel">Voiture Diesel</option>
                     <option value="VoitureEssence">Voiture Essence</option>
                     <option value="tram">Tramway</option>
-                    <option value="bus">Bus</option>
+                    <option value="autobus">Autobus</option>
                     <option value="trotinetteElec">Trottinette Électrique</option>
                     <option value="marche">Marche à pied</option>
+                    <option value="velo">Vélo</option>
                     <option value="metro">Métro</option>
                 </select>
 
@@ -117,7 +170,6 @@
 
                 <!-- Bouton calculer -->
                 <button type="button" class="btn" onclick="calculateCarbon()">Calculer</button>
-                <input type="reset"  value="Réinitialiser">
             </form>
         </div>
 
