@@ -133,6 +133,7 @@ function calculateCarbon() {
     const duree = parseFloat(document.getElementById('Duree').value);
     const distance2 = parseFloat(document.getElementById('distance2').value) * 2;
     const mode2 =  document.getElementById('mode2').value;
+
     
 
     // Validation des entrées
@@ -155,7 +156,11 @@ const passagers1 = parseInt(document.getElementById("passagers1").value) || 1;
 const covoiturage2 = document.getElementById("covoiturage2").value;
 const passagers2 = parseInt(document.getElementById("passagers2").value) || 1;
 
+const covoiturage3 = document.getElementById("covoiturage3").value;
+const passagers3 = parseInt(document.getElementById("passagers3").value) || 1;
+
 stageCarbonEmission = 0;
+carbonEmissionDeplacement=0;
 
 // Calcul pour le premier mode de transport
 if (distance1 > 0 && emissionFactors[mode1] !== undefined) {
@@ -174,9 +179,17 @@ if (distance2 > 0 && emissionFactors[mode2] !== undefined) {
     }
     stageCarbonEmission += emission;
 }
+//calcul pour le trajet domicile-lieu de travail
+if (distance > 0 && emissionFactors[transport] !== undefined) {
+    let emision = distance * emissionFactors[transport];
+    if (covoiturage3 === "oui" && (transport === "VoitureDiesel" || transport === "VoitureEssence")) {
+        emision /= passagers3;
+    }
+    carbonEmissionDeplacement += emision;
+}
 
 
-    const carbonEmissionDeplacement = distance * emissionFactors[transport];
+    
     const carbonJours = carbonEmissionDeplacement * jours;
     
     //stageCarbonEmission = distance1 * emissionFactors[mode1];
@@ -188,7 +201,7 @@ if (distance2 > 0 && emissionFactors[mode2] !== undefined) {
     // Affichage du résultat
     document.getElementById('result').innerHTML = `
         <p>Votre bilan carbone total correspondant à votre stage d'une durée de ${duree} semaines est de <strong>${finalCarbonResult.toFixed(2)} kg CO₂e</strong>.</p>
-        <p>Émissions liées au déplacement domicile-lieu de stage : <strong>${homeToWorkCarbonEmission.toFixed(2)} kg CO₂e</strong>.</p>
+        <p>Émissions liées aux déplacements domicile-lieu de stage : <strong>${homeToWorkCarbonEmission.toFixed(2)} kg CO₂e</strong>.</p>
         <p>Émissions liées au déplacement vers le lieu du stage : <strong>${stageCarbonEmission.toFixed(2)} kg CO₂e</strong>.</p>
     `;
 
