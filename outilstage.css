@@ -8,8 +8,8 @@ body {
     background-repeat: repeat-x;
     background-size: cover;
     display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Positionne en haut, avec de l'espace si besoin */
+    flex-direction: column; /* Ajuste la disposition */
+    align-items: center;
     min-height: 100vh;
 }
 
@@ -17,39 +17,39 @@ body {
 .container {
     background-color: #ffffff;
     padding: 2em;
-    margin-top: 2em; /* Ajoute un espace pour que tout soit visible */
+    margin-top: 2em;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    max-width: 1000px; /* Limite la largeur pour éviter d'étendre trop */
-    width: 90%; /* Pour les petits écrans */
+    max-width: 900px;
+    width: 90%;
     text-align: center;
-   
+    flex-grow: 1; /* Permet d'éviter trop d’espace en bas */
 }
 
-/* Logo + Globe */
+/* Logo repositionné */
 .logo-container {
     display: flex;
+    justify-content: center; /* Centre le logo */
     align-items: center;
-    position: absolute;
-    top: 15px;
-    left: 15px;
+    margin-bottom: 1em; /* Ajoute un espace avant le titre */
 }
 
 .logo {
-    width: 50px;
-    height: 50px;
-}
-
-.globe {
-    font-size: 30px;
-    margin-left: 10px; /* Ajuste l'espacement avec le logo */
+    width: 70px; /* Agrandissement du logo */
+    height: auto;
 }
 
 /* Titres */
 h1 {
-    color: #333333;
-    font-size: 1.8em;
-    margin-bottom: 1em;
+    color: #2C3E50;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+h3 {
+    color: #34495E;
+    font-size: 1.4em;
+    margin-top: 1.5em;
 }
 
 /* Paragraphes */
@@ -57,7 +57,7 @@ p {
     color: #555555;
     font-size: 1em;
     margin-bottom: 1em;
-    line-height: 1.6; /* Améliore la lisibilité */
+    line-height: 1.6;
 }
 
 /* Formulaire */
@@ -73,19 +73,49 @@ input, select, button {
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 100%; /* Assure que tout est aligné */
+    width: 100%;
 }
 
+/* Ajout de couleur légère pour les listes déroulantes */
+select {
+    background-color: #f8f9fa;
+    border: 1px solid #b2bec3;
+    cursor: pointer;
+}
+
+select:hover, select:focus {
+    background-color: #ffffff;
+    border-color: #007BFF;
+}
+
+input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Boutons modernisés */
 button {
     background-color: #28a745;
     color: white;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-weight: bold;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Bouton de réinitialisation */
+#rafraichir {
+    background-color: #007BFF;
+}
+
+#rafraichir:hover {
+    background-color: #0056b3;
 }
 
 /* Résultat */
@@ -96,7 +126,7 @@ button:hover {
 }
 
 #result-section {
-    display: none; /* Masque la section résultat par défaut */
+    display: none;
     margin-top: 20px;
     padding: 20px;
     background-color: #f9f9f9;
@@ -115,18 +145,12 @@ button:hover {
     transition: background-color 0.3s ease;
 }
 
-#rafraichir{
-
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-
 #back-button:hover {
     background-color: #0056b3;
+}
+
+/* Réduction de l’espace blanc en bas */
+footer {
+    margin-top: auto; /* Évite trop d’espace en bas */
+    padding-bottom: 1em;
 }
