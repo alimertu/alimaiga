@@ -19,30 +19,32 @@
         
         <!-- Titre principal -->
         <h1>Bilan Carbone Stage</h1>
-        <p>
+        <h4>
             Ce simulateur évalue l'empreinte carbone de votre stage, c'est-à-dire les émissions liées 
             au transport vers le lieu de stage ainsi que celles liées à vos déplacements domicile lieu de stage.
-        </p>
-        <p>Les autres émissions liées à l'alimentation ou encore à l'électricité sont hors périmètre.</p>
+        </h4>
+       
         
         <!-- Section formulaire -->
         <div id="form-section">
             <form id="carbonForm">
-
+                
                 <div class="logo-container">
                     <img src="eseo.png" alt="Logo ESEO" class="logo">
                     <span class="globe">🌍</span>
                 </div>
                 
-                <h5>Tous les champs sont à remplir</h5>
+                <p>Les autres émissions liées à l'alimentation ou encore à l'électricité sont hors périmètre.</p>
                   
                 
                 <!-- Identité -->
                 <input type="text" id="Nom" name="Nom" required placeholder="Entrez votre nom">
                 <input type="text" id="Prénom" name="Prénom" required placeholder="Entrez votre prénom">
-                
+
+                <hr>
+
                 <!-- Choix du site -->
-                <label for="site">Choix du site :</label>
+                <label for="site">Choix du campus d'origine :</label>
                 <select id="site" name="site">
                     <option value="Angers">Angers</option>
                     <option value="Paris-Vélizy">Paris-Vélizy</option>
@@ -105,6 +107,7 @@
     <input type="number" id="passagers1" name="passagers1" min="1" placeholder="Entrez le nombre de passagers">
 </div>
 
+<hr>
                 <label for="mode2">Mode de transport secondaire si existant :</label>
                 <select id="mode2" name="mode2">
                     <option value=" "></option>
@@ -153,6 +156,8 @@
                     <option value="velo">Vélo</option>
                     <option value="metro">Métro</option>
                 </select>
+               
+
 
 
                
@@ -161,6 +166,16 @@
                  <label for="distance">Distance domicile-lieu de stage (km) :</label>
                  <input type="number" id="distance" name="distance" required min="0" placeholder="Entrez la distance allez uniquement en km">
 
+                 <label for="covoiturage3">Avez-vous fait du covoiturage  ?</label>
+                 <select id="covoiturage3" name="covoiturage3" onchange="toggleCovoituragePassengers(3)">
+                     <option value="non">Non</option>
+                     <option value="oui">Oui</option>
+                 </select>
+
+                 <div id="passagersContainer3" style="display: none;">
+                    <label for="passagers3">Nombre total de passagers (y compris vous) :</label>
+                    <input type="number" id="passagers3" name="passagers3" min="1" placeholder="Entrez le nombre de passagers">
+                </div>
                 <!-- Jours et durée -->
                 <label for="Jours">Nombre moyen de jours de travail par semaine :</label>
                 <input type="number" id="Jours" name="Jours" required min="0" placeholder="Entrez le nombre de jours">
@@ -168,8 +183,10 @@
                 <label for="Duree">Durée totale du stage (semaines) :</label>
                 <input type="number" id="Duree" name="Duree" required min="0" placeholder="Entrez le nombre de semaines">
 
+                <hr>
                 <!-- Bouton calculer -->
                 <button type="button" class="btn" onclick="calculateCarbon()">Calculer</button>
+                <button type="button" id="rafraichir" class="btn" onclick="location.reload();">Réinitialiser</button>
             </form>
         </div>
 
@@ -181,8 +198,12 @@
             <button id="back-button" class="btn" type="button" onclick="goBack()">Revenir au formulaire</button>
            
             <button class="btn" type="button" onclick="exportToExcel()">Télécharger le fichier Excel</button>
-            
-            
+           
+
+          <footer>
+
+            <h5>Les émissions sont calculées sur une simulation de trajets aller-retour</h5>
+          </footer>  
         </div>
         <div>
             <canvas id="carbonChart"></canvas>
